@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Big Billion Days</title>
+    <title>BIg Billion Days</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -72,6 +72,7 @@
             color: white;
         }
 
+        /* ----- SEARCH (exact) ----- */
         .search-section {
             background: white;
             padding: 8px 16px;
@@ -299,6 +300,7 @@
             letter-spacing: 2px;
         }
 
+        /* ========== 🎯 PRODUCT GRID – WITH HEART ICON (FLIPKART STYLE) ========== */
         .product-section {
             background: #f1f3f6;
             padding: 8px 8px 0 8px;
@@ -346,7 +348,7 @@
             transition: 0.1s ease;
             border: 1px solid rgba(0,0,0,0.00);
             height: 100%;
-            position: relative;
+            position: relative; /* for heart positioning */
         }
 
         .product-card:active {
@@ -371,6 +373,7 @@
             object-fit: contain;
         }
 
+        /* --- FLIPKART STYLE DISCOUNT BADGE --- */
         .discount-badge {
             position: absolute;
             top: 12px;
@@ -385,6 +388,7 @@
             letter-spacing: 0.3px;
         }
 
+        /* --- ❤️ HEART ICON – EXACT FLIPKART WISHLIST (position top-right) --- */
         .wishlist-heart {
             position: absolute;
             top: 10px;
@@ -444,6 +448,7 @@
         }
 
         .rating-stars {
+            color: #ff9f00;
             background: #388e3c;
             color: white;
             padding: 2px 6px;
@@ -562,7 +567,7 @@
     <span class="arrow"><i class="fas fa-chevron-down"></i></span>
 </div>
 
-<!-- ===== CATEGORY STRIP (Grocery & Furniture Removed) ===== -->
+<!-- ===== CATEGORY STRIP ===== -->
 <div class="category-strip">
     <div class="category-item" data-category="Mobiles">
         <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
@@ -580,6 +585,10 @@
         <div class="category-icon"><i class="fas fa-tv"></i></div>
         <span>TV & Appl</span>
     </div>
+    <div class="category-item" data-category="Furniture">
+        <div class="category-icon"><i class="fas fa-couch"></i></div>
+        <span>Furniture</span>
+    </div>
     <div class="category-item" data-category="Beauty">
         <div class="category-icon"><i class="fas fa-heart"></i></div>
         <span>Beauty</span>
@@ -588,12 +597,15 @@
         <div class="category-icon"><i class="fas fa-futbol"></i></div>
         <span>Sports</span>
     </div>
+    <div class="category-item" data-category="Grocery">
+        <div class="category-icon"><i class="fas fa-car"></i></div>
+        <span>Grocery</span>
+    </div>
 </div>
 
-<!-- ===== FILTER PILLS (Grocery & Furniture Removed) ===== -->
+<!-- ===== FILTER PILLS ===== -->
 <div class="filter-pills">
     <button class="pill active" id="filterAll">All Products</button>
-    <button class="pill" id="filterMobiles">Mobiles</button>
     <button class="pill" id="filterElectronics">Electronics</button>
     <button class="pill" id="filterHome">Home Appliances</button>
     <button class="pill" id="filterFashion">Fashion</button>
@@ -629,7 +641,7 @@
     </div>
 </div>
 
-<!-- ===== PRODUCT GRID ===== -->
+<!-- ===== PRODUCT GRID – WITH HEART (LIKE) BUTTON ===== -->
 <div class="product-section">
     <div class="section-header">
         <h2>Today's hottest deals</h2>
@@ -645,7 +657,7 @@
         "use strict";
 
         // ---------- COUNTDOWN ----------
-        let totalSeconds = 15 * 60 * 60; // 15 hours in seconds
+        let totalSeconds = 15 * 60;
         function updateCountdown() {
             const hours = Math.floor(totalSeconds / 3600);
             const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -693,56 +705,59 @@
             }, 3000);
         });
 
-        // ---------- PRODUCT DATASET (Grocery & Furniture Removed) ----------
+        // ---------- PRODUCT DATASET (same as Flipkart) ----------
         const products = [
-            { id: 1, name: "RR 70 L Desert Air Cooler White, Blissair 70", price: 7999, image: "assets/images/cooler.webp", category: "Home Appliances" },
-            { id: 2, name: "PHILIPS MG3724/30 Multigroomer - 6-in-1 Trimmer", price: 1299, image: "assets/images/trimmer.webp", category: "Electronics" },
-            { id: 3, name: "Rechargeable Blender 200W Portable Juicer", price: 899, image: "assets/images/juse.webp", category: "Home Appliances" },
-            { id: 4, name: "Limited Edition Air Cooler for Home - Mini AC", price: 2999, image: "assets/images/mini.webp", category: "Home Appliances" },
-            { id: 5, name: "Nothing Phone (3a) (Black, 256 GB) 8 GB RAM", price: 39999, image: "assets/images/nothing.webp", category: "Mobiles" },
-            { id: 6, name: "boAt 300 Bluetooth Speaker with LED Lights", price: 1299, image: "assets/images/jbl.webp", category: "Electronics" },
-            { id: 7, name: "boAt Wave Fury Smartwatch - 1.83 HD Display", price: 1999, image: "assets/images/boat.webp", category: "Electronics" },
-            { id: 8, name: "GX 1 500W Juicer Mixer Grinder (3 Jars)", price: 1899, image: "assets/images/xxxx.webp", category: "Home Appliances" },
-            { id: 9, name: "6 kg Semi Automatic Top Load Washing Machine", price: 7990, image: "assets/images/big.webp", category: "Home Appliances" },
-            { id: 10, name: "Signature Energy Pro 1200mm BLDC Ceiling Fan", price: 2399, image: "assets/images/fan.webp", category: "Home Appliances" },
-            { id: 11, name: "MUST HAVE Complete Makeup Box (Pack of 11)", price: 999, image: "assets/images/make.webp", category: "Beauty" },
-            { id: 12, name: "Galaxy S25 5G (Navy, 256 GB) 12 GB RAM", price: 89999, image: "assets/images/s25.webp", category: "Mobiles" },
-            { id: 13, name: "1.5 Ton 3 Star Split Inverter AC - 2025 Model", price: 35999, image: "assets/images/ac.webp", category: "Electronics"},
-            { id: 14, name: "GO Wireless GPS Tracker for Car", price: 1999, image: "assets/images/gps.webp", category: "Electronics" },
-            { id: 15, name: "Fastrack Stunners Analog Watch - For Men", price: 1299, image: "assets/images/watch.webp", category: "Fashion" },
-            { id: 16, name: "Helicopter Kids Toy with Lights (Red)", price: 599, image: "assets/images/hel.webp", category: "Sports" },
-            { id: 17, name: "Galaxy S24+ 5G (Onyx Black, 256 GB) 12 GB RAM", price: 75999, image: "assets/images/s24.webp", category: "Mobiles" },
-            { id: 18, name: "Cult FT98Carbon Motorized Treadmill - 4HP", price: 24999, image: "assets/images/dodo.webp", category: "Sports" },
-            { id: 19, name: "Ear 2024 True Wireless Headset - ChatGPT Compatible", price: 1999, image: "assets/images/ear.webp", category: "Electronics" },
-            { id: 20, name: "Master Buds Max with BOSE Sound - ANC Headset", price: 3999, image: "assets/images/head.webp", category: "Electronics" },
-            { id: 21, name: "SanDisk Extreme Portable 1 TB External SSD", price: 8499, image: "assets/images/pen.webp", category: "Electronics" },
-            { id: 22, name: "Men's Casual Slippers (Yellow, Size 9)", price: 399, image: "assets/images/chapp.webp", category: "Fashion" },
-            { id: 23, name: "JIYI GPS Module for Agricultural Drone", price: 2999, image: "assets/images/gps2.webp", category: "Electronics" },
-            { id: 24, name: "1080P HD Wi-Fi Security Camera - 32 GB", price: 1499, image: "assets/images/holder.webp", category: "Electronics" },
-            { id: 25, name: "Fogger Gas Stove - 3 Burner with Jumbo Burner", price: 2399, image: "assets/images/burner.webp", category: "Home Appliances" },
-            { id: 26, name: "New Shakti 5L Induction Bottom Pressure Cooker", price: 1999, image: "assets/images/cooker.webp", category: "Home Appliances" },
-            { id: 27, name: "Alexa Echo Dot (5th Gen) Smart Speaker", price: 2999, image: "assets/images/bulbs.webp", category: "Electronics" },
-            { id: 28, name: "AirPods 4 Wireless Earbuds with ANC", price: 14999, image: "assets/images/ipods.webp", category: "Electronics" },
-            { id: 29, name: "RYIK 20W PD Fast Wall Charger with Cable", price: 599, image: "assets/images/charger.webp", category: "Electronics" },
-            { id: 30, name: "Pebble Halo Smart Ring - Health Tracker", price: 2999, image: "assets/images/hand.webp", category: "Electronics" },
-            { id: 31, name: "boAt Aavante 200W Bluetooth Soundbar", price: 4999, image: "assets/images/soundbox.webp", category: "Electronics" },
-            { id: 32, name: "SanDisk 512 GB OTG Drive - Type A to C", price: 1999, image: "assets/images/pendrive2.webp", category: "Electronics" },
-            { id: 33, name: "DELL Wireless Keyboard & Mouse Combo", price: 1299, image: "assets/images/keyboard.webp", category: "Electronics" }
+            { id: 1, name: "RR 70 L Desert Air Cooler White, Blissair 70", price: 799, image: "assets/images/cooler.webp", category: "Home Appliances" },
+            { id: 2, name: "PHILIPS MG3724/30, Multigroomer, Self sharpening Blades Trimmer 6...", price: 299, image: "assets/images/trimmer.webp", category: "Electronics" },
+            { id: 3, name: "Rechargeable Blender 200 W Juicer (Rechargeable Portable Blender ...", price: 399, image: "assets/images/juse.webp", category: "Home Appliances" },
+            
+            { id: 33, name: "2025 Model 1.5 Ton 3 Star Split Inverter Silver Plus Series with HD Compressor, AI, Dual Gold Fin, Nano Tek Coating & 8-in-1 Flexi Mode AC (CI173SL22RGM1, White)", price: 5999, image: "assets/images/ac.webp", category: "Electronics"},
+            { id: 4, name: "Limited Edition Air Cooler for home, Portable Cooler, Mini AC, Ta...", price: 299, image: "assets/images/mini.webp", category: "Home Appliances" },
+                        { id: 34, name: "Nothing Phone (3a) (Black, 256 GB) 8 GB RAM", price: 3999, image: "assets/images/nothing.webp", category: "mobiles"},
+            { id: 5, name: "boAt 300 / 320 with Flame LEDs & Up to 6 hrs Playtime 120 W Bluet...", price: 299, image: "assets/images/jbl.webp", category: "Electronics" },
+            { id: 6, name: "boAt Wave Fury with 1.83'' HD Display, Bluetooth Calling & Functional Crown Smartwatch", price: 399, image: "assets/images/boat.webp", category: "Electronics" },
+            { id: 7, name: "GX 1 500 W Juicer Mixer Grinder (410570 | 3 Jars | Blue)", price: 299, image: "assets/images/xxxx.webp", category: "Home Appliances" },
+            { id: 8, name: "6 kg 5 Star Rating Innowash Range Semi Automatic Top Load White, Maroon (MQSA605NNNDM / MQSA60H5W)", price: 799, image: "assets/images/big.webp", category: "Home Appliances" },
+            { id: 9, name: "Signature Energy Pro with 3 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | Mirage White. | Pack of 1)", price: 399, image: "assets/images/fan.webp", category: "Home Appliances" },
+            { id: 10, name: "MUST HAVE Complete Makeup Box (Medium) (Pack of 11)", price: 199, image: "assets/images/make.webp", category: "Beauty" },
+                        { id: 31, name: "Galaxy S25 5G (Navy, 256 GB) (12 GB RAM)", price: 8999, image: "assets/images/s25.webp", category: "mobiles"},
+            { id: 11, name: "GO Wireless GPS Tracker for Car GPS Device (Black)", price: 299, image: "assets/images/gps.webp", category: "Electronics" },
+            { id: 12, name: "Fastrack Stunners Black Dial Black Metal Strap Analog Watch - For Men NT3255NM01", price: 299, image: "assets/images/watch.webp", category: "Fashion" },
+            { id: 13, name: "helicopter kids toy (Red)", price: 299, image: "assets/images/hel.webp", category: "Sports" },
+            { id: 14, name: "by Cult FT98Carbon BLDC Motorized (4HP Peak) | 100KG Max Weight | Home Use Treadmill.", price: 699, image: "assets/images/dodo.webp", category: "Sports" },
+            { id: 15, name: "Ear 2024 | ChatGPT Compatible | Hi-Res Audio | LDAC & LHDC Bluetooth Headset (White, True Wireless)", price: 199, image: "assets/images/ear.webp", category: "Electronics" },
+            { id: 16, name: "Master Buds Max, Sound by BOSE, Segment Leading ANC, Dynamic EQ, 60 Hr Playtime Bluetooth Headset (Onyx, On the Ear).", price: 399, image: "assets/images/head.webp", category: "Electronics" },
+            { id: 17, name: "SanDisk Extreme Portable 1 TB External Solid State Drive (SSD) 1050 MB/s, USB 3.2, 3mtr Drop Protection, Compatible with PC and Mac (Monterey)", price: 499, image: "assets/images/pen.webp", category: "Electronics" },
+            { id: 18, name: "Men Slippers (Yellow, 9)", price: 199, image: "assets/images/chapp.webp", category: "Fashion" },
+            { id: 19, name: "JIYI GPS Module for K++ V2 Agricultural Spraying Drone GPS Device (White)", price: 299, image: "assets/images/gps2.webp", category: "Electronics" },
+            { id: 20, name: "SAFETY NET, SPY CAMERA 1080P HD Wi-Fi Camera Security Indoor Camera Support iOS/Android (iWFCam APP) Security Camera (32 GB, 1 Channel)", price: 299, image: "assets/images/holder.webp", category: "Electronics" },
+            { id: 21, name: "Fogger Gas stove 3 Burner LPG Stove with jambo Burner Iron Manual Gas Stove (3 Burners)", price: 399, image: "assets/images/burner.webp", category: "Home Appliances" },
+            { id: 22, name: "Extra Time Condom (10 Sheets)", price: 99, image: "assets/images/condom.webp", category: "Home Appliances" },
+            { id: 23, name: "New Shakti 5HD HA Handi With IB 5 L Induction Bottom Pressure Cooker (Hard Anodized)", price: 499, image: "assets/images/cooker.webp", category: "Home Appliances" },
+            { id: 24, name: "Alexa Echo Dot (5th Gen) | Bluetooth with Alexa Assistant Smart Speaker (White)", price: 299, image: "assets/images/bulbs.webp", category: "Electronics" },
+            { id: 25, name: "AirPods 4 Wireless Earbuds with Active Noise Cancellation, Adaptive Audio Bluetooth Headset (White, True Wireless)", price: 299, image: "assets/images/ipods.webp", category: "Electronics" },
+            { id: 26, name: "RYIK 20 W PD 2.1 A Wall Charger for Mobile with Detachable Cable (Compatible with iphone 15 pro Max, 15 plus, 15, 15 pro, Cable Included)", price: 199, image: "assets/images/charger.webp", category: "Electronics" },
+            { id: 27, name: "pebble Halo | Display, Gesture Controls, Health Tracker & Sleek Design Smart Ring (11, Black)", price: 299, image: "assets/images/hand.webp", category: "Electronics" },
+            { id: 28, name: "boAt Aavante 2.1 2000 200 W Bluetooth Soundbar (Premium Black, 2.1 Channel)", price: 499, image: "assets/images/soundbox.webp", category: "Electronics" },
+            { id: 29, name: "SanDisk SDDDC4-512G-I35 512 GB OTG Drive Compatible with Mobile, Desktop Computer, Laptop USB 3.1 Metal Case (Silver, Type A to Type C)", price: 299, image: "assets/images/pendrive2.webp", category: "Electronics" },
+            { id: 30, name: "DELL KM3322W Keyboard & Mouse Combo, Anti-fade & Spill-resistant Keys Wireless Standard Multi-device Keyboard Compatible with Desktop, Laptop, Mac up to 36 Month Battery Life, 3Y Advance Exchange Warranty (Black)", price: 299, image: "assets/images/keyboard.webp", category: "Electronics" },
+
+            { id: 32, name: "Galaxy S24+ 5G (Onyx Black, 256 GB) (12 GB RAM)", price: 5999, image: "assets/images/s24.webp", category: "mobiles"},
+
+    
         ];
 
         // ---------- UTILITIES ----------
-        function generateRandomDiscount() { return Math.floor(Math.random() * 30) + 20; } // 20-50% off
-        function calculateOriginalPrice(curr, disc) { return Math.round(curr / (1 - disc/100)); }
-        function generateRandomRating() { return (Math.random() * 1.5 + 3.5).toFixed(1); } // 3.5-5.0
-        function generateRandomRatingCount() { 
-            const counts = [1245, 2567, 5123, 7890, 10234, 20456, 35678, 49876, 62109]; 
-            return counts[Math.floor(Math.random() * counts.length)]; 
-        }
+        function generateRandomDiscount() { return Math.floor(Math.random() * 16) + 80; }
+        function calculateOriginalPrice(curr, disc) { return Math.max(Math.round(curr / (1 - disc/100)), Math.round(curr * 1.2)); }
+        function generateRandomRating() { return (Math.random() * 1.4 + 3.5).toFixed(1); }
+        function generateRandomRatingCount() { const counts = [124,256,512,789,1023,2045,3567,4987,6210]; return counts[Math.floor(Math.random() * counts.length)]; }
         function createSlug(name) { return name.toLowerCase().replace(/[^\w\s-]/g,'').replace(/\s+/g,'-').replace(/--+/g,'-').trim(); }
 
-        // ---------- WISHLIST STORAGE ----------
+        // ---------- 🎯 GLOBAL WISHLIST STORAGE (like Flipkart) ----------
         let wishlistItems = JSON.parse(localStorage.getItem('flipkartWishlist')) || [];
 
+        // toggle heart function – exactly like Flipkart
         window.toggleWishlist = function(productId, heartElement) {
             const index = wishlistItems.indexOf(productId);
             if (index === -1) {
@@ -759,13 +774,14 @@
             localStorage.setItem('flipkartWishlist', JSON.stringify(wishlistItems));
         };
 
+        // ---------- NAVIGATION TO PRODUCT PAGE (with heart state preserved) ----------
         function navigateToProduct(product, discountPercent, originalPrice, rating, ratingCount) {
             const slug = createSlug(product.name);
             const url = `view.html?id=${product.id}&name=${slug}&product=${encodeURIComponent(product.name)}&price=${product.price}&original=${originalPrice}&discount=${discountPercent}&category=${encodeURIComponent(product.category)}&rating=${rating}&ratingCount=${ratingCount}&image=${encodeURIComponent(product.image)}`;
             window.location.href = url;
         }
 
-        // ---------- RENDER PRODUCTS ----------
+        // ---------- RENDER PRODUCTS WITH HEART ICON ----------
         const productGrid = document.getElementById("productGrid");
         const searchInput = document.getElementById('flipkartSearch');
         let currentCategory = 'All Products';
@@ -782,16 +798,20 @@
                 const original = calculateOriginalPrice(product.price, discount);
                 const rating = generateRandomRating();
                 const ratingCount = generateRandomRatingCount();
+
+                // check if product is in wishlist
                 const isLiked = wishlistItems.includes(product.id);
 
                 const card = document.createElement("div");
                 card.className = "product-card";
                 card.setAttribute("data-category", product.category);
                 
+                // ---- CARD INNER HTML with HEART (exact flipkart) ----
                 card.innerHTML = `
                     <div class="product-img">
                         <div class="discount-badge">${discount}% off</div>
                         <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150x150?text=Product'">
+                        <!-- ❤️ HEART BUTTON – EXACT FLIPKART WISHLIST -->
                         <div class="wishlist-heart ${isLiked ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist(${product.id}, this)">
                             <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
                         </div>
@@ -803,8 +823,8 @@
                             <span class="rating-count">(${ratingCount})</span>
                         </div>
                         <div class="price-container">
-                            <span class="current-price">₹${product.price.toLocaleString()}</span>
-                            <span class="original-price">₹${original.toLocaleString()}</span>
+                            <span class="current-price">₹${product.price}</span>
+                            <span class="original-price">₹${original}</span>
                             <span class="discount-percent">${discount}% off</span>
                         </div>
                         <div class="assured">
@@ -813,7 +833,9 @@
                     </div>
                 `;
 
+                // navigate on card click (not on heart click)
                 card.addEventListener("click", (e) => {
+                    // prevent if heart clicked (heart has its own handler)
                     if (!e.target.closest('.wishlist-heart')) {
                         e.preventDefault();
                         navigateToProduct(product, discount, original, rating, ratingCount);
@@ -827,22 +849,18 @@
         // ---------- FILTER LOGIC ----------
         function filterProducts(category) {
             currentCategory = category;
-            if (category === 'All Products') {
-                loadProducts(products);
-            } else {
-                loadProducts(products.filter(p => p.category === category));
-            }
+            if (category === 'All Products') loadProducts(products);
+            else loadProducts(products.filter(p => p.category === category));
         }
 
         // ---------- FILTER BUTTONS ----------
         const allBtn = document.getElementById('filterAll');
-        const mobilesBtn = document.getElementById('filterMobiles');
         const elecBtn = document.getElementById('filterElectronics');
         const homeBtn = document.getElementById('filterHome');
         const fashionBtn = document.getElementById('filterFashion');
         const beautyBtn = document.getElementById('filterBeauty');
         const sportsBtn = document.getElementById('filterSports');
-        const pills = [allBtn, mobilesBtn, elecBtn, homeBtn, fashionBtn, beautyBtn, sportsBtn];
+        const pills = [allBtn, elecBtn, homeBtn, fashionBtn, beautyBtn, sportsBtn];
 
         function setActive(activePill) {
             pills.forEach(p => p.classList.remove('active'));
@@ -850,7 +868,6 @@
         }
 
         allBtn.addEventListener('click', function() { setActive(allBtn); filterProducts('All Products'); });
-        mobilesBtn.addEventListener('click', function() { setActive(mobilesBtn); filterProducts('Mobiles'); });
         elecBtn.addEventListener('click', function() { setActive(elecBtn); filterProducts('Electronics'); });
         homeBtn.addEventListener('click', function() { setActive(homeBtn); filterProducts('Home Appliances'); });
         fashionBtn.addEventListener('click', function() { setActive(fashionBtn); filterProducts('Fashion'); });
@@ -860,14 +877,8 @@
         // ---------- SEARCH ----------
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            if (!term) { 
-                filterProducts(currentCategory); 
-                return; 
-            }
-            const filtered = products.filter(p => 
-                p.name.toLowerCase().includes(term) || 
-                p.category.toLowerCase().includes(term)
-            );
+            if (!term) { filterProducts(currentCategory); return; }
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
             loadProducts(filtered);
         });
 
@@ -876,9 +887,7 @@
             item.addEventListener('click', function() {
                 const category = this.getAttribute('data-category');
                 filterProducts(category);
-                
-                const pillId = 'filter' + category.replace(' ', '');
-                const matchingPill = document.getElementById(pillId);
+                const matchingPill = document.getElementById('filter' + category.replace(' ', ''));
                 if (matchingPill) setActive(matchingPill);
             });
         });
@@ -886,11 +895,11 @@
         // ---------- INITIAL LOAD ----------
         loadProducts(products);
 
-        // Refresh wishlist on storage change
+        // refresh wishlist status on storage change (multi-tab)
         window.addEventListener('storage', function(e) {
             if (e.key === 'flipkartWishlist') {
                 wishlistItems = JSON.parse(e.newValue || '[]');
-                filterProducts(currentCategory);
+                loadProducts(currentCategory === 'All Products' ? products : products.filter(p => p.category === currentCategory));
             }
         });
 
