@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    margin:0;
+    background:#f1f3f6;
+}
+
+/* ================= TOP BAR ================= */
+.top-bar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#fff;
+    padding:12px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    z-index:1000;
+}
+
+.top-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.back{
+    font-size:20px;
+    cursor:pointer;
+}
+
+.step{
+    font-size:12px;
+    color:#777;
+}
+
+.title{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.secure{
+    padding:6px 10px;
+    font-size:13px;
+    color:#000;
+    background:#d9eff7;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    border-radius:20px;
+    font-weight:500;
+}
+
+.header-space{
+    height:70px;
+}
+
+.wrapper{
+    display:flex;
+    justify-content:center;
+    padding-top:10px;
+}
+
+.qr-card{
+    width:300px;
+    background:#fff;
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    text-align:center;
+}
+
+.logo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin-bottom:12px;
+}
+
+.logo img{
+    width:40px;
+}
+
+.logo span{
+    font-size:22px;
+    font-weight:bold;
+    color:#5f259f;
+}
+
+/* QR */
+.qr-box{
+    position:relative;
+    padding:10px;
+    border-radius:12px;
+}
+
+.qr-box img{
+    width:100%;
+    max-width:220px;
+}
+
+.qr-box.blur img{
+    filter:blur(6px);
+}
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(40,116,240,0.35);
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.overlay.hidden{
+    display:none;
+}
+
+.refresh-btn{
+    background:#fff;
+    color:#2874f0;
+    border-radius:50%;
+    width:42px;
+    height:42px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    font-size:22px;
+}
+
+/* TIMER */
+.timer-bar{
+    margin-top:10px;
+    background:#fff;
+    color:#db842d;
+    padding:10px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:bold;
+    display:none;
+}
+
+/* PAYMENTS ICONS */
+.payments{
+    margin-top:12px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.payments img{
+    width:32px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔥 REAL HEADER -->
+<div class="top-bar">
+    <div class="top-left">
+        <div>
+            <div class="step">Step 3 of 3</div>
+            <div class="title">Payments</div>
+        </div>
+    </div>
+    <div class="secure">100% Secure</div>
+</div>
+
+<div class="header-space"></div>
+
+<!-- CONTENT -->
+<div class="wrapper">
+    <div class="qr-card">
+
+        <div class="logo">
+            <img src="assets/images/phonepe-logo.webp">
+            <span>PhonePe</span>
+        </div>
+
+        <div class="qr-box blur" id="qrBox">
+            <img src="assets/images/qr.png">
+            <div class="overlay" id="overlay">
+                <div class="refresh-btn" onclick="refreshQR()">⟳</div>
+            </div>
+        </div>
+
+        <div class="timer-bar" id="timer">02:00</div>
+
+        <div class="payments">
+            <img src="assets/images/paytm.png">
+            <img src="assets/images/gpay.webp">
+            <img src="assets/images/bhim.png">
+            <img src="assets/images/phonepe.png">
+            <img src="assets/images/amazonpay.png">
+        </div>
+
+    </div>
+</div>
+
+<script>
+let time = 120;
+let interval;
+
+const qrBox = document.getElementById("qrBox");
+const overlay = document.getElementById("overlay");
+const timer = document.getElementById("timer");
+
+function formatTime(sec){
+    let m = String(Math.floor(sec / 60)).padStart(2,'0');
+    let s = String(sec % 60).padStart(2,'0');
+    return m + ":" + s;
+}
+
+function refreshQR(){
+    clearInterval(interval);
+    time = 120;
+
+    qrBox.classList.remove("blur");
+    overlay.classList.add("hidden");
+    timer.style.display = "block";
+    timer.innerText = formatTime(time);
+
+    interval = setInterval(() => {
+        time--;
+        timer.innerText = formatTime(time);
+
+        if(time <= 0){
+            clearInterval(interval);
+            qrBox.classList.add("blur");
+            overlay.classList.remove("hidden");
+            timer.style.display = "none";
+        }
+    },1000);
+}
+</script>
+
+</body>
+</html>
