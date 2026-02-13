@@ -323,7 +323,6 @@
             font-size: 16px;
             margin-right: 12px;
         }
-        /* REVIEW GRID - IMPROVED */
         .review-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -470,7 +469,6 @@
                 padding: 12px;
             }
         }
-        /* Hide review section when empty */
         .review-section[style*="display: none"] {
             display: none !important;
         }
@@ -569,7 +567,7 @@
         <ul class="highlights-list" id="highlightsList"></ul>
     </section>
 
-    <!-- ===== REVIEW SECTION – ONLY SHOW IF ACTUAL IMAGES EXIST ===== -->
+    <!-- ===== REVIEW SECTION ===== -->
     <section class="review-section" id="reviewSection" style="display: none;">
         <div class="review-title">
             <i class="fas fa-star-half-stroke"></i> Customer Reviews
@@ -685,8 +683,8 @@
                     }
                 }
                 loadProductHighlights();
-                loadProductImages();
-                loadRealReviewsOnly(); // Changed function name
+                loadProductImages(); // Fixed: Now loads all main images dynamically
+                loadRealReviewsOnly();
             }
 
             function loadProductHighlights() {
@@ -707,12 +705,15 @@
                 });
             }
 
+            // ===== FIXED: DYNAMIC MAIN IMAGES LOADING =====
+            // Yeh function ab main1 se lekar main n tak saari images dhunde ga
             function loadProductImages() {
                 const slider = document.getElementById('slider');
                 const dotsBox = document.getElementById('dots');
                 slider.innerHTML = '';
                 dotsBox.innerHTML = '';
 
+                // Agar product ID nahi hai to demo image dikhao
                 if (!productId) {
                     const slide = document.createElement('div');
                     slide.className = 'slide';
@@ -723,27 +724,72 @@
                 }
 
                 const basePath = `assets/${productId}/images/`;
-                const imageCandidates = ['main.webp', 'main2.webp', 'main3.webp', 'main4.webp'];
-                const loadedImages = [];
-                let checked = 0;
+                const foundImages = [];
+                let checkedCount = 0;
+                let totalToCheck = 20; // Maximum 20 images check karega (main1 to main20)
 
-                imageCandidates.forEach(name => {
-                    const img = new Image();
-                    img.src = basePath + name;
-                    img.onload = () => {
-                        loadedImages.push(name);
-                        if (name === 'main.webp') mainImagePath = basePath + name;
-                        checked++;
-                        if (checked === imageCandidates.length) renderSlides();
+                // Pehle main1.webp check karo (jo main image hoti hai)
+                const mainImg = new Image();
+                mainImg.src = basePath + 'main.webp';
+                mainImg.onload = () => {
+                    foundImages.push('main.webp');
+                    mainImagePath = basePath + 'main.webp';
+                    checkNextImages(2); // main2 se start karo
+                };
+                mainImg.onerror = () => {
+                    // Agar main.webp nahi mila to main1.webp try karo
+                    const main1Img = new Image();
+                    main1Img.src = basePath + 'main1.webp';
+                    main1Img.onload = () => {
+                        foundImages.push('main1.webp');
+                        mainImagePath = basePath + 'main1.webp';
+                        checkNextImages(2); // main2 se start karo
                     };
-                    img.onerror = () => {
-                        checked++;
-                        if (checked === imageCandidates.length) renderSlides();
+                    main1Img.onerror = () => {
+                        // Agar koi main image nahi mili to demo dikhao
+                        checkNextImages(2); // Phir bhi aage check karo
                     };
-                });
+                };
+
+                // Yeh function main2, main3, main4... check karega
+                function checkNextImages(startNum) {
+                    for (let i = startNum; i <= totalToCheck; i++) {
+                        const img = new Image();
+                        const fileName = `main${i}.webp`;
+                        img.src = basePath + fileName;
+                        
+                        img.onload = (function(filename) {
+                            return function() {
+                                foundImages.push(filename);
+                                checkedCount++;
+                                if (checkedCount === totalToCheck - 1) {
+                                    renderSlides();
+                                }
+                            };
+                        })(fileName);
+                        
+                        img.onerror = (function() {
+                            checkedCount++;
+                            if (checkedCount === totalToCheck - 1) {
+                                renderSlides();
+                            }
+                        });
+                    }
+                }
 
                 function renderSlides() {
-                    if (loadedImages.length === 0) {
+                    // Sort images properly (main.webp, main1.webp, main2.webp, etc.)
+                    const sortedImages = foundImages.sort((a, b) => {
+                        const getNum = (name) => {
+                            const match = name.match(/main(\d*)\./);
+                            if (!match) return 0;
+                            return match[1] ? parseInt(match[1]) : 0;
+                        };
+                        return getNum(a) - getNum(b);
+                    });
+
+                    // Agar koi image nahi mili to demo image dikhao
+                    if (sortedImages.length === 0) {
                         const slide = document.createElement('div');
                         slide.className = 'slide';
                         slide.innerHTML = '<img src="assets/demo/images/main.webp" alt="fallback" onerror="this.src=\'https://via.placeholder.com/600x600?text=Flipkart+Assured\'">';
@@ -752,13 +798,15 @@
                         return;
                     }
 
-                    loadedImages.forEach((imgName, index) => {
+                    // Sab images ke liye slides banao
+                    sortedImages.forEach((imgName, index) => {
                         const slide = document.createElement('div');
                         slide.className = 'slide';
                         slide.innerHTML = `<img src="${basePath}${imgName}" alt="Product ${index + 1}" loading="lazy">`;
                         slider.appendChild(slide);
 
-                        if (loadedImages.length > 1) {
+                        // Dots sirf tab banayein jab ek se zyada images hon
+                        if (sortedImages.length > 1) {
                             const dot = document.createElement('span');
                             dot.className = 'dot' + (index === 0 ? ' active' : '');
                             dot.onclick = () => {
@@ -769,7 +817,8 @@
                         }
                     });
 
-                    if (loadedImages.length > 1) {
+                    // Auto-slide start karo agar ek se zyada images hon
+                    if (sortedImages.length > 1) {
                         slider.addEventListener('scroll', () => {
                             const index = Math.round(slider.scrollLeft / slider.offsetWidth);
                             updateDots(index);
@@ -799,27 +848,21 @@
                 }, 3000);
             }
 
-            // ========== FIXED: ONLY REAL REVIEWS, NO FAKES ==========
             function loadRealReviewsOnly() {
                 const reviewGrid = document.getElementById('reviewGrid');
                 const reviewSection = document.getElementById('reviewSection');
                 
-                // Initially hide the review section
                 reviewSection.style.display = 'none';
                 reviewGrid.innerHTML = '';
 
-                // If no product ID, don't show any reviews
                 if (!productId) {
-                    return; // Review section remains hidden
+                    return;
                 }
 
                 const reviewBasePath = `assets/${productId}/images/`;
-                
-                // Only check for review images - no fallbacks, no demo images
                 const extensions = ['webp', 'jpg', 'jpeg', 'png'];
                 const reviewCandidates = [];
                 
-                // Generate potential review filenames (review1 to review10)
                 for (let i = 1; i <= 10; i++) {
                     extensions.forEach(ext => {
                         reviewCandidates.push(`review${i}.${ext}`);
@@ -829,68 +872,54 @@
                 let loadedCount = 0;
                 const validImages = [];
 
-                // If no candidates to check, just return (section stays hidden)
                 if (reviewCandidates.length === 0) {
                     return;
                 }
 
-                // Check each candidate image
                 reviewCandidates.forEach(filename => {
                     const img = new Image();
                     img.src = reviewBasePath + filename;
                     
                     img.onload = () => {
-                        // Image exists - add to valid images
                         validImages.push(filename);
                         loadedCount++;
                         
-                        // If we've checked all candidates, render if we found any
                         if (loadedCount === reviewCandidates.length) {
                             if (validImages.length > 0) {
                                 renderRealReviews(validImages);
                             }
-                            // If no valid images, section stays hidden (already hidden)
                         }
                     };
                     
                     img.onerror = () => {
                         loadedCount++;
-                        // If we've checked all candidates and found no valid images
                         if (loadedCount === reviewCandidates.length && validImages.length === 0) {
-                            // Section remains hidden - do nothing
                             console.log('No review images found for product:', productId);
                         }
                     };
                 });
 
-                // Safety timeout - if no images loaded after 2 seconds, give up
                 setTimeout(() => {
                     if (validImages.length > 0) {
                         renderRealReviews(validImages);
                     }
-                    // If no valid images, section stays hidden
                 }, 2000);
             }
 
-            // Render only real review images
             function renderRealReviews(imageFilenames) {
                 const reviewGrid = document.getElementById('reviewGrid');
                 const reviewSection = document.getElementById('reviewSection');
                 const basePath = `assets/${productId}/images/`;
                 
-                // Clear grid
                 reviewGrid.innerHTML = '';
 
-                // Only proceed if we have real images
                 if (!imageFilenames || imageFilenames.length === 0) {
                     reviewSection.style.display = 'none';
                     return;
                 }
 
-                // Sort and deduplicate filenames
                 const uniqueImages = [...new Set(imageFilenames)].sort();
                 
-                // Create review cards for each real image
                 uniqueImages.forEach((filename) => {
                     const card = document.createElement('div');
                     card.className = 'review-card';
@@ -920,7 +949,6 @@
                     reviewGrid.appendChild(card);
                 });
 
-                // Only show section if we actually added images
                 if (reviewGrid.children.length > 0) {
                     reviewSection.style.display = 'block';
                 } else {
