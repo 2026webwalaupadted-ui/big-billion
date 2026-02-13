@@ -323,7 +323,7 @@
             font-size: 16px;
             margin-right: 12px;
         }
-        /* ----- FIXED: REVIEW IMAGES 100% WIDTH, NO GAP, ONLY ASSETS ----- */
+        /* REVIEW GRID - IMPROVED */
         .review-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -340,7 +340,6 @@
             width: 100%;
             transition: box-shadow 0.1s;
         }
-        /* IMAGE CONTAINER – NO FIXED ASPECT, 100% WIDTH, NO GAP */
         .review-card .img-container {
             width: 100%;
             background: white;
@@ -351,7 +350,6 @@
             overflow: hidden;
             position: relative;
         }
-        /* IMAGE – 100% WIDTH, CONTAIN, NO GAP */
         .review-card img {
             width: 100%;
             height: auto;
@@ -472,6 +470,7 @@
                 padding: 12px;
             }
         }
+        /* Hide review section when empty */
         .review-section[style*="display: none"] {
             display: none !important;
         }
@@ -570,8 +569,8 @@
         <ul class="highlights-list" id="highlightsList"></ul>
     </section>
 
-    <!-- ===== REVIEW SECTION – 100% WIDTH, ONLY ASSETS, NO GAP ===== -->
-    <section class="review-section" id="reviewSection">
+    <!-- ===== REVIEW SECTION – ONLY SHOW IF ACTUAL IMAGES EXIST ===== -->
+    <section class="review-section" id="reviewSection" style="display: none;">
         <div class="review-title">
             <i class="fas fa-star-half-stroke"></i> Customer Reviews
         </div>
@@ -687,7 +686,7 @@
                 }
                 loadProductHighlights();
                 loadProductImages();
-                loadFlipkartReviews();
+                loadRealReviewsOnly(); // Changed function name
             }
 
             function loadProductHighlights() {
@@ -800,75 +799,99 @@
                 }, 3000);
             }
 
-            // ---------- 🎯 REVIEWS: 100% WIDTH, ONLY ASSETS, NO GAP ----------
-            function loadFlipkartReviews() {
+            // ========== FIXED: ONLY REAL REVIEWS, NO FAKES ==========
+            function loadRealReviewsOnly() {
                 const reviewGrid = document.getElementById('reviewGrid');
                 const reviewSection = document.getElementById('reviewSection');
+                
+                // Initially hide the review section
+                reviewSection.style.display = 'none';
                 reviewGrid.innerHTML = '';
 
+                // If no product ID, don't show any reviews
                 if (!productId) {
-                    showExactFlipkartReviews();
-                    return;
+                    return; // Review section remains hidden
                 }
 
                 const reviewBasePath = `assets/${productId}/images/`;
-                const extensions = ['jpeg', 'jpg', 'png', 'webp'];
-                let reviewCandidates = [];
-                for (let i = 1; i <= 12; i++) {
-                    extensions.forEach(ext => reviewCandidates.push(`review${i}.${ext}`));
+                
+                // Only check for review images - no fallbacks, no demo images
+                const extensions = ['webp', 'jpg', 'jpeg', 'png'];
+                const reviewCandidates = [];
+                
+                // Generate potential review filenames (review1 to review10)
+                for (let i = 1; i <= 10; i++) {
+                    extensions.forEach(ext => {
+                        reviewCandidates.push(`review${i}.${ext}`);
+                    });
                 }
-                reviewCandidates = [...new Set(reviewCandidates)];
 
                 let loadedCount = 0;
                 const validImages = [];
 
-                function checkCompletion() {
-                    if (loadedCount === reviewCandidates.length) {
-                        if (validImages.length === 0) {
-                            showExactFlipkartReviews();
-                        } else {
-                            reviewSection.style.display = 'block';
-                            renderExactFlipkartReviews(validImages);
-                        }
-                    }
-                }
-
+                // If no candidates to check, just return (section stays hidden)
                 if (reviewCandidates.length === 0) {
-                    showExactFlipkartReviews();
                     return;
                 }
 
+                // Check each candidate image
                 reviewCandidates.forEach(filename => {
                     const img = new Image();
                     img.src = reviewBasePath + filename;
+                    
                     img.onload = () => {
+                        // Image exists - add to valid images
                         validImages.push(filename);
                         loadedCount++;
-                        checkCompletion();
+                        
+                        // If we've checked all candidates, render if we found any
+                        if (loadedCount === reviewCandidates.length) {
+                            if (validImages.length > 0) {
+                                renderRealReviews(validImages);
+                            }
+                            // If no valid images, section stays hidden (already hidden)
+                        }
                     };
+                    
                     img.onerror = () => {
                         loadedCount++;
-                        checkCompletion();
+                        // If we've checked all candidates and found no valid images
+                        if (loadedCount === reviewCandidates.length && validImages.length === 0) {
+                            // Section remains hidden - do nothing
+                            console.log('No review images found for product:', productId);
+                        }
                     };
                 });
 
+                // Safety timeout - if no images loaded after 2 seconds, give up
                 setTimeout(() => {
-                    if (validImages.length === 0) showExactFlipkartReviews();
-                }, 600);
+                    if (validImages.length > 0) {
+                        renderRealReviews(validImages);
+                    }
+                    // If no valid images, section stays hidden
+                }, 2000);
             }
 
-            // 🎯 RENDER REVIEWS – 100% WIDTH IMAGE, CONTAIN, NO GAP
-            function renderExactFlipkartReviews(imageFilenames) {
+            // Render only real review images
+            function renderRealReviews(imageFilenames) {
                 const reviewGrid = document.getElementById('reviewGrid');
+                const reviewSection = document.getElementById('reviewSection');
                 const basePath = `assets/${productId}/images/`;
+                
+                // Clear grid
                 reviewGrid.innerHTML = '';
 
+                // Only proceed if we have real images
                 if (!imageFilenames || imageFilenames.length === 0) {
-                    showExactFlipkartReviews();
+                    reviewSection.style.display = 'none';
                     return;
                 }
 
-                imageFilenames.sort().forEach((filename) => {
+                // Sort and deduplicate filenames
+                const uniqueImages = [...new Set(imageFilenames)].sort();
+                
+                // Create review cards for each real image
+                uniqueImages.forEach((filename) => {
                     const card = document.createElement('div');
                     card.className = 'review-card';
                     
@@ -877,12 +900,8 @@
                     
                     const img = document.createElement('img');
                     img.src = basePath + filename;
-                    img.alt = `Customer review`;
+                    img.alt = 'Customer review';
                     img.loading = 'lazy';
-                    img.onerror = function() {
-                        this.src = 'assets/demo/images/review1.webp';
-                        this.onerror = null;
-                    };
                     
                     const heartDiv = document.createElement('div');
                     heartDiv.className = 'review-heart';
@@ -894,61 +913,19 @@
                     
                     const caption = document.createElement('div');
                     caption.className = 'review-caption';
-                    caption.innerHTML = `<i class="fas fa-check-circle"></i> Verified Purchase`;
+                    caption.innerHTML = '<i class="fas fa-check-circle"></i> Verified Purchase';
                     
                     card.appendChild(imgContainer);
                     card.appendChild(caption);
                     reviewGrid.appendChild(card);
                 });
-            }
 
-            // 🌟 DEMO REVIEWS – SIRF ASSETS FOLDER SE, BAHAR KA KUCH NAHI
-            function showExactFlipkartReviews() {
-                const reviewGrid = document.getElementById('reviewGrid');
-                const reviewSection = document.getElementById('reviewSection');
-                reviewSection.style.display = 'block';
-                reviewGrid.innerHTML = '';
-
-                // Sirf assets/demo/images/ se images loade karega
-                const demoImgs = [
-                    'assets/demo/images/review1.webp',
-                    'assets/demo/images/review2.webp',
-                    'assets/demo/images/review3.webp',
-                    'assets/demo/images/review4.webp'
-                ];
-
-                demoImgs.forEach((src) => {
-                    const card = document.createElement('div');
-                    card.className = 'review-card';
-                    
-                    const imgContainer = document.createElement('div');
-                    imgContainer.className = 'img-container';
-                    
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = `Customer review`;
-                    img.loading = 'lazy';
-                    img.onerror = function() {
-                        this.src = 'https://via.placeholder.com/600x400?text=Flipkart+Review';
-                        this.style.objectFit = 'contain';
-                    };
-                    
-                    const heartDiv = document.createElement('div');
-                    heartDiv.className = 'review-heart';
-                    heartDiv.setAttribute('onclick', 'toggleReviewHeart(this)');
-                    heartDiv.innerHTML = '<i class="far fa-heart"></i>';
-                    
-                    imgContainer.appendChild(img);
-                    imgContainer.appendChild(heartDiv);
-                    
-                    const caption = document.createElement('div');
-                    caption.className = 'review-caption';
-                    caption.innerHTML = `<i class="fas fa-check-circle"></i> Verified Purchase`;
-                    
-                    card.appendChild(imgContainer);
-                    card.appendChild(caption);
-                    reviewGrid.appendChild(card);
-                });
+                // Only show section if we actually added images
+                if (reviewGrid.children.length > 0) {
+                    reviewSection.style.display = 'block';
+                } else {
+                    reviewSection.style.display = 'none';
+                }
             }
 
             document.addEventListener('DOMContentLoaded', () => {
