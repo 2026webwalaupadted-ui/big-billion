@@ -118,8 +118,6 @@
             font-size: 14px;
             color: #878787;
         }
-
-        /* Product Details Card - Updated with 2-line product name */
         .fk-product-detail-card {
             background: white;
             border-radius: 8px;
@@ -152,13 +150,12 @@
             margin-bottom: 8px;
             line-height: 1.4;
             
-            /* CRITICAL FIX: Limit to 2 lines */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-height: 44px; /* 2 lines * 22px line-height */
+            max-height: 44px;
         }
 
         .fk-product-meta {
@@ -252,7 +249,6 @@
             color: #212121;
             margin-bottom: 4px;
             
-            /* CRITICAL FIX: Limit to 2 lines for order section too */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -369,11 +365,9 @@
                 </div>
             </div>
 
-            <!-- Product Details Card - Product name limited to 2 lines -->
             <div class="fk-product-detail-card" id="productDetailCard">
                 <img src="" alt="Product" class="fk-product-image" id="productImage">
                 <div class="fk-product-details">
-                    <!-- Product name will show only 2 lines maximum -->
                     <div class="fk-product-title" id="productName">PHILIPS MG3724/30, Multigroomer, Self sharpening Blades Trimmer 6...</div>
                     <div class="fk-product-meta">
                         <div class="fk-rating"><i class="fas fa-star"></i> 4.5 <span style="opacity:0.8;">(2,345)</span></div>
@@ -395,7 +389,6 @@
                 
                 <div class="fk-divider"></div>
                 
-                <!-- Order Item - Product name also limited to 2 lines here -->
                 <div class="fk-order-detail">
                     <div class="fk-product-icon">
                         <i class="fas fa-box" style="font-size: 24px; color: #2874f0;"></i>
@@ -456,7 +449,6 @@
                 }
             }
             
-            // Product details - long name will be truncated to 2 lines by CSS
             const productName = decodeParam(urlParams.get('product')) || 'PHILIPS MG3724/30, Multigroomer, Self sharpening Blades Trimmer 6-in-1 with 10 Attachments';
             const productPrice = urlParams.get('price') || '1499';
             let productImage = urlParams.get('image') || 'https://m.media-amazon.com/images/I/51utC7C8PUL._SX522_.jpg';
@@ -474,7 +466,6 @@
                     };
                 }
 
-                // Update product name in both places - CSS will handle truncation to 2 lines
                 const nameElements = ['productName', 'orderProductName'];
                 nameElements.forEach(id => {
                     const el = document.getElementById(id);

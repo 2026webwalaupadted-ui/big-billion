@@ -532,7 +532,6 @@
 </head>
 <body>
 
-<!-- ===== FLIPKART HEADER ===== -->
 <div class="flip-header">
     <div class="flip-logo-area">
         <div class="flip-logo">
@@ -549,7 +548,6 @@
     </div>
 </div>
 
-<!-- ===== SEARCH ===== -->
 <div class="search-section">
     <div class="search-container">
         <i class="fas fa-search"></i>
@@ -560,14 +558,11 @@
     </div>
 </div>
 
-<!-- ===== LOCATION TAG ===== -->
 <div class="delivery-tag">
     <i class="fas fa-location-dot"></i>
     <span><b>Select delivery location</b> </span>
     <span class="arrow"><i class="fas fa-chevron-down"></i></span>
 </div>
-
-<!-- ===== CATEGORY STRIP ===== -->
 <div class="category-strip">
     <div class="category-item" data-category="Mobiles">
         <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
@@ -603,7 +598,6 @@
     </div>
 </div>
 
-<!-- ===== FILTER PILLS ===== -->
 <div class="filter-pills">
     <button class="pill active" id="filterAll">All Products</button>
     <button class="pill" id="filterElectronics">Electronics</button>
@@ -613,7 +607,6 @@
     <button class="pill" id="filterSports">Sports</button>
 </div>
 
-<!-- ===== PROMO SLIDER ===== -->
 <div class="promo-wrapper">
     <div class="promo-slider" id="slider">
         <div class="promo-card"><img src="assets/images/banner1.webp" alt="banner1" onerror="this.src='https://via.placeholder.com/800x300?text=Deal+1'"></div>
@@ -629,7 +622,6 @@
     </div>
 </div>
 
-<!-- ===== COUNTDOWN ===== -->
 <div class="countdown-section">
     <div class="countdown-title">
         <i class="fas fa-bolt" style="color: #ff9f00;"></i> Limited time deal
@@ -641,7 +633,6 @@
     </div>
 </div>
 
-<!-- ===== PRODUCT GRID – WITH HEART (LIKE) BUTTON ===== -->
 <div class="product-section">
     <div class="section-header">
         <h2>Today's hottest deals</h2>
@@ -656,7 +647,6 @@
     (function() {
         "use strict";
 
-        // ---------- COUNTDOWN ----------
         let totalSeconds = 15 * 60;
         function updateCountdown() {
             const hours = Math.floor(totalSeconds / 3600);
@@ -671,7 +661,6 @@
         updateCountdown();
         const countdownInterval = setInterval(updateCountdown, 1000);
 
-        // ---------- SLIDER ----------
         const slider = document.getElementById("slider");
         const dots = document.querySelectorAll(".dot");
         const slides = document.querySelectorAll(".promo-card");
@@ -709,18 +698,17 @@
             { id: 1, name: "RR 70 L Desert Air Cooler White, Blissair 70", price: 1549, image: "assets/images/cooler.webp", category: "Home Appliances" },
             { id: 2, name: "PHILIPS MG3724/30, Multigroomer, Self sharpening Blades Trimmer 6...", price: 314, image: "assets/images/trimmer.webp", category: "Electronics" },
             { id: 3, name: "Rechargeable Blender 200 W Juicer (Rechargeable Portable Blender ...", price: 399, image: "assets/images/juse.webp", category: "Home Appliances" },
-            
             { id: 33, name: "2025 Model 1.5 Ton 3 Star Split Inverter Silver Plus Series with HD Compressor, AI, Dual Gold Fin, Nano Tek Coating & 8-in-1 Flexi Mode AC (CI173SL22RGM1, White)", price: 6225, image: "assets/images/ac.webp", category: "Electronics"},
             { id: 4, name: "Limited Edition Air Cooler for home, Portable Cooler, Mini AC, Ta...", price: 423, image: "assets/images/mini.webp", category: "Home Appliances" },
-                        { id: 34, name: "Nothing Phone (3a) (Black, 256 GB) 8 GB RAM", price: 5256, image: "assets/images/nothing.webp", category: "mobiles"},
+            { id: 34, name: "Nothing Phone (3a) (Black, 256 GB) 8 GB RAM", price: 5256, image: "assets/images/nothing.webp", category: "mobiles"},
             { id: 5, name: "boAt 300 / 320 with Flame LEDs & Up to 6 hrs Playtime 120 W Bluet...", price: 849, image: "assets/images/jbl.webp", category: "Electronics" },
             { id: 6, name: "boAt Wave Fury with 1.83'' HD Display, Bluetooth Calling & Functional Crown Smartwatch", price: 399, image: "assets/images/boat.webp", category: "Electronics" },
             { id: 7, name: "GX 1 500 W Juicer Mixer Grinder (410570 | 3 Jars | Blue)", price: 349, image: "assets/images/xxxx.webp", category: "Home Appliances" },
             { id: 8, name: "6 kg 5 Star Rating Innowash Range Semi Automatic Top Load White, Maroon (MQSA605NNNDM / MQSA60H5W)", price: 1899, image: "assets/images/big.webp", category: "Home Appliances" },
             { id: 9, name: "Signature Energy Pro with 3 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | Mirage White. | Pack of 1)", price: 419, image: "assets/images/fan.webp", category: "Home Appliances" },
             { id: 10, name: "MUST HAVE Complete Makeup Box (Medium) (Pack of 11)", price: 199, image: "assets/images/make.webp", category: "Beauty" },
-                        { id: 36, name: "NIKON Z50 II Mirrorless Camera Body with 16-50 Lens (Black)", price: 3560, image: "assets/images/cam.webp", category: "Mobiles"},
-                        { id: 31, name: "Galaxy S25 5G (Navy, 256 GB) (12 GB RAM)", price: 8999, image: "assets/images/s25.webp", category: "Mobiles"},
+            { id: 36, name: "NIKON Z50 II Mirrorless Camera Body with 16-50 Lens (Black)", price: 3560, image: "assets/images/cam.webp", category: "Mobiles"},
+            { id: 31, name: "Galaxy S25 5G (Navy, 256 GB) (12 GB RAM)", price: 8999, image: "assets/images/s25.webp", category: "Mobiles"},
             { id: 11, name: "GO Wireless GPS Tracker for Car GPS Device (Black)", price: 318, image: "assets/images/gps.webp", category: "Electronics" },
             { id: 12, name: "Fastrack Stunners Black Dial Black Metal Strap Analog Watch - For Men NT3255NM01", price: 299, image: "assets/images/watch.webp", category: "Fashion" },
             { id: 13, name: "helicopter kids toy (Red)", price: 299, image: "assets/images/hel.webp", category: "Sports" },
@@ -746,9 +734,9 @@
             { id: 29, name: "SanDisk SDDDC4-512G-I35 512 GB OTG Drive Compatible with Mobile, Desktop Computer, Laptop USB 3.1 Metal Case (Silver, Type A to Type C)", price: 422, image: "assets/images/pendrive2.webp", category: "Electronics" },
             { id: 30, name: "DELL KM3322W Keyboard & Mouse Combo, Anti-fade & Spill-resistant Keys Wireless Standard Multi-device Keyboard Compatible with Desktop, Laptop, Mac up to 36 Month Battery Life, 3Y Advance Exchange Warranty (Black)", price: 299, image: "assets/images/keyboard.webp", category: "Electronics" },
             { id: 35, name: "183 L Direct Cool Single Door 2 Star Refrigerator (Saffron Blue, RR20C1812U8/HL)", price: 1518, image: "assets/images/main.webp", category: "Mobiles"},
-             { id: 40, name: "realme Pad 3 with biggest battery in segment 8 GB RAM 128 GB ROM 11.6 inch with Wi-Fi+5G MediaTek Dimensity 7300-Max Tablet (Space Grey)", price: 2585, image: "assets/images/tab.webp", category: "Mobiles"},
-             { id: 41, name: "Dairy Milk Silk Fruit and Nut Valentine's Gift Pack Chocolate Bars (6 x 51 g)", price: 248, image: "assets/images/darry.webp", category: "Mobiles"},
-             { id: 42, name: "AIR ZOOM PEGASUS 41 Running Shoes For Men (Black , 8)", price: 1299, image: "assets/images/naki.webp", category: "Mobiles"},
+            { id: 40, name: "realme Pad 3 with biggest battery in segment 8 GB RAM 128 GB ROM 11.6 inch with Wi-Fi+5G MediaTek Dimensity 7300-Max Tablet (Space Grey)", price: 2585, image: "assets/images/tab.webp", category: "Mobiles"},
+            { id: 41, name: "Dairy Milk Silk Fruit and Nut Valentine's Gift Pack Chocolate Bars (6 x 51 g)", price: 248, image: "assets/images/darry.webp", category: "Mobiles"},
+            { id: 42, name: "AIR ZOOM PEGASUS 41 Running Shoes For Men (Black , 8)", price: 1299, image: "assets/images/naki.webp", category: "Mobiles"},
         ];
 
         function generateRandomDiscount() { return Math.floor(Math.random() * 16) + 80; }
@@ -757,10 +745,8 @@
         function generateRandomRatingCount() { const counts = [124,256,512,789,1023,2045,3567,4987,6210]; return counts[Math.floor(Math.random() * counts.length)]; }
         function createSlug(name) { return name.toLowerCase().replace(/[^\w\s-]/g,'').replace(/\s+/g,'-').replace(/--+/g,'-').trim(); }
 
-        // ---------- 🎯 GLOBAL WISHLIST STORAGE (like Flipkart) ----------
         let wishlistItems = JSON.parse(localStorage.getItem('flipkartWishlist')) || [];
 
-        // toggle heart function – exactly like Flipkart
         window.toggleWishlist = function(productId, heartElement) {
             const index = wishlistItems.indexOf(productId);
             if (index === -1) {
@@ -777,14 +763,12 @@
             localStorage.setItem('flipkartWishlist', JSON.stringify(wishlistItems));
         };
 
-        // ---------- NAVIGATION TO PRODUCT PAGE (with heart state preserved) ----------
         function navigateToProduct(product, discountPercent, originalPrice, rating, ratingCount) {
             const slug = createSlug(product.name);
             const url = `view.html?id=${product.id}&name=${slug}&product=${encodeURIComponent(product.name)}&price=${product.price}&original=${originalPrice}&discount=${discountPercent}&category=${encodeURIComponent(product.category)}&rating=${rating}&ratingCount=${ratingCount}&image=${encodeURIComponent(product.image)}`;
             window.location.href = url;
         }
 
-        // ---------- RENDER PRODUCTS WITH HEART ICON ----------
         const productGrid = document.getElementById("productGrid");
         const searchInput = document.getElementById('flipkartSearch');
         let currentCategory = 'All Products';
@@ -802,14 +786,12 @@
                 const rating = generateRandomRating();
                 const ratingCount = generateRandomRatingCount();
 
-                // check if product is in wishlist
                 const isLiked = wishlistItems.includes(product.id);
 
                 const card = document.createElement("div");
                 card.className = "product-card";
                 card.setAttribute("data-category", product.category);
                 
-                // ---- CARD INNER HTML with HEART (exact flipkart) ----
                 card.innerHTML = `
                     <div class="product-img">
                         <div class="discount-badge">${discount}% off</div>
@@ -836,9 +818,7 @@
                     </div>
                 `;
 
-                // navigate on card click (not on heart click)
                 card.addEventListener("click", (e) => {
-                    // prevent if heart clicked (heart has its own handler)
                     if (!e.target.closest('.wishlist-heart')) {
                         e.preventDefault();
                         navigateToProduct(product, discount, original, rating, ratingCount);
@@ -848,15 +828,12 @@
                 productGrid.appendChild(card);
             });
         }
-
-        // ---------- FILTER LOGIC ----------
         function filterProducts(category) {
             currentCategory = category;
             if (category === 'All Products') loadProducts(products);
             else loadProducts(products.filter(p => p.category === category));
         }
 
-        // ---------- FILTER BUTTONS ----------
         const allBtn = document.getElementById('filterAll');
         const elecBtn = document.getElementById('filterElectronics');
         const homeBtn = document.getElementById('filterHome');
@@ -877,7 +854,6 @@
         beautyBtn.addEventListener('click', function() { setActive(beautyBtn); filterProducts('Beauty'); });
         sportsBtn.addEventListener('click', function() { setActive(sportsBtn); filterProducts('Sports'); });
 
-        // ---------- SEARCH ----------
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             if (!term) { filterProducts(currentCategory); return; }
@@ -885,7 +861,6 @@
             loadProducts(filtered);
         });
 
-        // ---------- CATEGORY ITEM CLICK ----------
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', function() {
                 const category = this.getAttribute('data-category');
@@ -894,11 +869,8 @@
                 if (matchingPill) setActive(matchingPill);
             });
         });
-
-        // ---------- INITIAL LOAD ----------
         loadProducts(products);
 
-        // refresh wishlist status on storage change (multi-tab)
         window.addEventListener('storage', function(e) {
             if (e.key === 'flipkartWishlist') {
                 wishlistItems = JSON.parse(e.newValue || '[]');

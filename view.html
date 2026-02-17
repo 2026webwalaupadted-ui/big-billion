@@ -475,8 +475,6 @@
     </style>
 </head>
 <body>
-
-    <!-- ===== HEADER ===== -->
     <div class="flip-header">
         <div class="flip-logo-area">
             <div class="flip-logo">
@@ -495,7 +493,6 @@
     </div>
     <div class="header-spacer"></div>
 
-    <!-- ===== PDP NAV ===== -->
     <div class="pdp-nav">
         <div class="pdp-nav-left">
             <i class="fas fa-arrow-left" onclick="window.history.back()"></i>
@@ -506,8 +503,6 @@
             <i class="fas fa-ellipsis-vertical"></i>
         </div>
     </div>
-
-    <!-- ===== MAIN IMAGE SLIDER ===== -->
     <div class="slider-wrapper">
         <div class="slider" id="slider"></div>
         <div class="wishlist-heart" id="mainWishlistHeart" onclick="toggleMainHeart(this)">
@@ -516,7 +511,6 @@
         <div class="dots" id="dots"></div>
     </div>
 
-    <!-- ===== PRODUCT DETAILS ===== -->
     <section class="product-detail">
         <h1 class="product-title" id="productName">Premium Product</h1>
         <div class="rating-badge">
@@ -538,7 +532,6 @@
         </div>
     </section>
 
-    <!-- ===== DELIVERY ===== -->
     <section class="delivery-info">
         <div class="delivery-title">
             <i class="fas fa-truck"></i> Delivery
@@ -559,7 +552,6 @@
         </div>
     </section>
 
-    <!-- ===== HIGHLIGHTS ===== -->
     <section class="highlights-section">
         <div class="highlights-title">
             <i class="fas fa-list-check"></i> Product Highlights
@@ -567,15 +559,12 @@
         <ul class="highlights-list" id="highlightsList"></ul>
     </section>
 
-    <!-- ===== REVIEW SECTION ===== -->
     <section class="review-section" id="reviewSection" style="display: none;">
         <div class="review-title">
             <i class="fas fa-star-half-stroke"></i> Customer Reviews
         </div>
         <div class="review-grid" id="reviewGrid"></div>
     </section>
-
-    <!-- ===== BUY BUTTONS ===== -->
     <div class="action-buttons">
         <button class="btn btn-cart" id="addToCartBtn">
             <i class="fas fa-shopping-cart"></i> ADD TO CART
@@ -683,7 +672,7 @@
                     }
                 }
                 loadProductHighlights();
-                loadProductImages(); // Fixed: Now loads all main images dynamically
+                loadProductImages(); 
                 loadRealReviewsOnly();
             }
 
@@ -705,15 +694,12 @@
                 });
             }
 
-            // ===== FIXED: DYNAMIC MAIN IMAGES LOADING =====
-            // Yeh function ab main1 se lekar main n tak saari images dhunde ga
             function loadProductImages() {
                 const slider = document.getElementById('slider');
                 const dotsBox = document.getElementById('dots');
                 slider.innerHTML = '';
                 dotsBox.innerHTML = '';
 
-                // Agar product ID nahi hai to demo image dikhao
                 if (!productId) {
                     const slide = document.createElement('div');
                     slide.className = 'slide';
@@ -726,32 +712,29 @@
                 const basePath = `assets/${productId}/images/`;
                 const foundImages = [];
                 let checkedCount = 0;
-                let totalToCheck = 20; // Maximum 20 images check karega (main1 to main20)
+                let totalToCheck = 20;
 
-                // Pehle main1.webp check karo (jo main image hoti hai)
+         
                 const mainImg = new Image();
                 mainImg.src = basePath + 'main.webp';
                 mainImg.onload = () => {
                     foundImages.push('main.webp');
                     mainImagePath = basePath + 'main.webp';
-                    checkNextImages(2); // main2 se start karo
+                    checkNextImages(2); 
                 };
                 mainImg.onerror = () => {
-                    // Agar main.webp nahi mila to main1.webp try karo
                     const main1Img = new Image();
                     main1Img.src = basePath + 'main1.webp';
                     main1Img.onload = () => {
                         foundImages.push('main1.webp');
                         mainImagePath = basePath + 'main1.webp';
-                        checkNextImages(2); // main2 se start karo
+                        checkNextImages(2); 
                     };
                     main1Img.onerror = () => {
-                        // Agar koi main image nahi mili to demo dikhao
-                        checkNextImages(2); // Phir bhi aage check karo
+                        checkNextImages(2);
                     };
                 };
 
-                // Yeh function main2, main3, main4... check karega
                 function checkNextImages(startNum) {
                     for (let i = startNum; i <= totalToCheck; i++) {
                         const img = new Image();
@@ -778,7 +761,6 @@
                 }
 
                 function renderSlides() {
-                    // Sort images properly (main.webp, main1.webp, main2.webp, etc.)
                     const sortedImages = foundImages.sort((a, b) => {
                         const getNum = (name) => {
                             const match = name.match(/main(\d*)\./);
@@ -788,7 +770,6 @@
                         return getNum(a) - getNum(b);
                     });
 
-                    // Agar koi image nahi mili to demo image dikhao
                     if (sortedImages.length === 0) {
                         const slide = document.createElement('div');
                         slide.className = 'slide';
@@ -798,14 +779,12 @@
                         return;
                     }
 
-                    // Sab images ke liye slides banao
                     sortedImages.forEach((imgName, index) => {
                         const slide = document.createElement('div');
                         slide.className = 'slide';
                         slide.innerHTML = `<img src="${basePath}${imgName}" alt="Product ${index + 1}" loading="lazy">`;
                         slider.appendChild(slide);
 
-                        // Dots sirf tab banayein jab ek se zyada images hon
                         if (sortedImages.length > 1) {
                             const dot = document.createElement('span');
                             dot.className = 'dot' + (index === 0 ? ' active' : '');
@@ -817,7 +796,6 @@
                         }
                     });
 
-                    // Auto-slide start karo agar ek se zyada images hon
                     if (sortedImages.length > 1) {
                         slider.addEventListener('scroll', () => {
                             const index = Math.round(slider.scrollLeft / slider.offsetWidth);
