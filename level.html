@@ -151,7 +151,7 @@
 
 <div class="bottom-checkout-bar">
   <div><div class="payable-label">Payable amount</div><div class="final-amount" id="bottomAmount"></div></div>
-  <button class="place-order-btn" id="payButton">Pay NOW</button>
+  <button class="place-order-btn" id="payButton">Pay with PhonePe</button>
 </div>
 
 <script>
@@ -226,49 +226,6 @@
       return 'TXN' + Date.now().toString().slice(-8) + Math.floor(Math.random() * 1000);
     }
 
-    function checkAppInstalled(appPackage) {
-      // Create an invisible iframe to check if app is installed
-      return new Promise((resolve) => {
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        
-        // Set timeout for app check
-        const timeout = setTimeout(() => {
-          document.body.removeChild(iframe);
-          resolve(false);
-        }, 500);
-        
-        iframe.src = `intent://#Intent;package=${appPackage};scheme=phonepe;end;`;
-        
-        iframe.onload = function() {
-          clearTimeout(timeout);
-          document.body.removeChild(iframe);
-          resolve(true);
-        };
-        
-        iframe.onerror = function() {
-          clearTimeout(timeout);
-          document.body.removeChild(iframe);
-          resolve(false);
-        };
-        
-        document.body.appendChild(iframe);
-      });
-    }
-
-    function openPlayStore() {
-      const playStoreUrl = 'market://details?id=com.phonepe.app';
-      const playStoreWebUrl = 'https://play.google.com/store/apps/details?id=com.phonepe.app';
-      
-      // Try to open Play Store app
-      window.location.href = playStoreUrl;
-      
-      // If Play Store app not installed, open web version
-      setTimeout(() => {
-        window.location.href = playStoreWebUrl;
-      }, 500);
-    }
-
     function createPhonePeUrl() {
       const data = {
         contact: { vpa: UPI_ID, type: "VPA" },
@@ -298,7 +255,7 @@
       if (element) element.classList.add('selected');
     };
 
-    payButton.onclick = async function(e) {
+    payButton.onclick = function(e) {
       e.preventDefault();
 
       const addrLine = document.getElementById('customerAddressLine').textContent.trim();
@@ -313,41 +270,37 @@
       }
 
       if (!isMobileDevice()) {
-        payButton.textContent = "Use Mobile Device";
-        setTimeout(() => {
-          payButton.textContent = `Pay with ${selectedMethod}`;
-        }, 1500);
+        alert('Please use mobile device');
         return;
       }
 
       payButton.disabled = true;
       payButton.classList.add('processing');
-      payButton.textContent = 'Checking PhonePe...';
+      payButton.textContent = 'Opening PhonePe...';
 
-      // Check if PhonePe is installed
-      const isInstalled = await checkAppInstalled('com.phonepe.app');
-      
-      if (!isInstalled) {
-        // Directly open Play Store without any popup
-        payButton.textContent = 'Opening Play Store...';
-        openPlayStore();
+      // Directly try to open PhonePe
+      window.location.href = createPhonePeUrl();
+
+      // Check if PhonePe opened successfully
+      setTimeout(() => {
+        // If still on this page after 2 seconds, PhonePe might not be installed
+        if (document.hasFocus()) {
+          payButton.textContent = 'Opening Play Store...';
+          // Open Play Store
+          window.location.href = 'market://details?id=com.phonepe.app';
+          
+          // Fallback to web Play Store
+          setTimeout(() => {
+            window.location.href = 'https://play.google.com/store/apps/details?id=com.phonepe.app';
+          }, 500);
+        }
         
+        // Reset button after some time
         setTimeout(() => {
           payButton.disabled = false;
           payButton.classList.remove('processing');
           payButton.textContent = `Pay with ${selectedMethod}`;
-        }, 2000);
-        return;
-      }
-
-      // PhonePe is installed, proceed with payment
-      payButton.textContent = 'Opening PhonePe...';
-      window.location.href = createPhonePeUrl();
-
-      setTimeout(() => {
-        payButton.disabled = false;
-        payButton.classList.remove('processing');
-        payButton.textContent = `Pay with ${selectedMethod}`;
+        }, 3000);
       }, 2000);
     };
 
