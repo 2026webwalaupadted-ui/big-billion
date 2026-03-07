@@ -172,9 +172,9 @@ src="https://www.facebook.com/tr?id=1502516798113338&ev=PageView&noscript=1"
 <script>
   (function() {
     "use strict";
-    
+
+
     const urlParams = new URLSearchParams(window.location.search);
-    
     const productName = decodeURIComponent(urlParams.get('product') || '');
     const productPrice = urlParams.get('price') || '';
     let productImage = urlParams.get('image') || '';
@@ -231,7 +231,7 @@ src="https://www.facebook.com/tr?id=1502516798113338&ev=PageView&noscript=1"
     const payButton = document.getElementById('payButton');
     let selectedMethod = 'PhonePe';
     
-    const UPI_ID = 'paytm.s150pz9@pty';
+    const UPI_ID = 'paytm.s1yw7ws@pty';
 
     function isMobileDevice() {
       return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
